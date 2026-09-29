@@ -1,0 +1,276 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Birthday Celebration</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    background:
+    radial-gradient(circle at top,#3d0c67,#120320 60%,#05010c);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+canvas{
+    position:fixed;
+    inset:0;
+}
+
+.container{
+    position:relative;
+    z-index:10;
+    text-align:center;
+    width:90%;
+    max-width:900px;
+    padding:50px;
+    backdrop-filter:blur(18px);
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:30px;
+    box-shadow:
+    0 0 40px rgba(255,255,255,.08),
+    0 0 80px rgba(255,0,150,.15);
+}
+
+.cake{
+    font-size:90px;
+    animation:float 3s ease-in-out infinite;
+}
+
+h1{
+    font-size:4.5rem;
+    margin-top:10px;
+    background:linear-gradient(90deg,#ffd700,#fff,#ff7ad9);
+    -webkit-background-clip:text;
+    color:transparent;
+    text-shadow:0 0 30px rgba(255,255,255,.4);
+}
+
+.subtitle{
+    font-size:1.4rem;
+    margin-top:15px;
+    color:#f5e6ff;
+}
+
+.buttons{
+    margin-top:35px;
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+button{
+    padding:14px 28px;
+    border:none;
+    border-radius:50px;
+    font-size:1rem;
+    cursor:pointer;
+    transition:.3s;
+    font-weight:600;
+}
+
+.btn1{
+    background:linear-gradient(45deg,#ff5ea8,#ff9d00);
+    color:white;
+}
+
+.btn2{
+    background:linear-gradient(45deg,#00c6ff,#0072ff);
+    color:white;
+}
+
+.btn3{
+    background:linear-gradient(45deg,#7f00ff,#e100ff);
+    color:white;
+}
+
+button:hover{
+    transform:translateY(-4px) scale(1.05);
+    box-shadow:0 10px 25px rgba(255,255,255,.2);
+}
+
+.footer{
+    position:absolute;
+    bottom:15px;
+    left:50%;
+    transform:translateX(-50%);
+    color:rgba(255,255,255,.75);
+    font-size:.95rem;
+    letter-spacing:2px;
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-12px);}
+}
+
+.confetti{
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    animation:fall 4s linear forwards;
+}
+
+@keyframes fall{
+    from{
+        transform:translateY(-100px) rotate(0deg);
+        opacity:1;
+    }
+    to{
+        transform:translateY(110vh) rotate(720deg);
+        opacity:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<div class="container">
+    <div class="cake">🎂</div>
+
+    <h1>Happy Birthday!</h1>
+
+    <p class="subtitle">
+        May your day be filled with happiness, success,
+        unforgettable memories and endless celebrations ✨
+    </p>
+
+    <div class="buttons">
+        <button class="btn1" onclick="launchConfetti()">
+            🎊 Confetti Blast
+        </button>
+
+        <button class="btn2" onclick="birthdayWish()">
+            🎁 Special Wish
+        </button>
+
+        <button class="btn3" onclick="megaFireworks()">
+            🎆 Mega Fireworks
+        </button>
+    </div>
+</div>
+
+<div class="footer">
+    Crafted with ❤️ by Giriraj
+</div>
+
+<script>
+// Confetti
+function launchConfetti(){
+    for(let i=0;i<200;i++){
+        let c=document.createElement("div");
+        c.className="confetti";
+
+        c.style.left=Math.random()*100+"vw";
+        c.style.background=
+        `hsl(${Math.random()*360},100%,60%)`;
+
+        c.style.animationDuration=
+        (2+Math.random()*3)+"s";
+
+        document.body.appendChild(c);
+
+        setTimeout(()=>c.remove(),5000);
+    }
+}
+
+// Wish Popup
+function birthdayWish(){
+    alert(
+    "🎂 Happy Birthday! 🎉\n\nMay your dreams come true, your smile stay bright, and your year be filled with success and happiness!"
+    );
+}
+
+// Fireworks Canvas
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+
+function createFirework(x,y){
+    for(let i=0;i<80;i++){
+        particles.push({
+            x,y,
+            dx:(Math.random()-0.5)*8,
+            dy:(Math.random()-0.5)*8,
+            life:100
+        });
+    }
+}
+
+function megaFireworks(){
+    for(let i=0;i<8;i++){
+        setTimeout(()=>{
+            createFirework(
+                Math.random()*canvas.width,
+                Math.random()*canvas.height*0.6
+            );
+        },i*250);
+    }
+}
+
+function animate(){
+    requestAnimationFrame(animate);
+
+    ctx.fillStyle="rgba(5,1,12,0.18)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    particles.forEach((p,index)=>{
+        p.x+=p.dx;
+        p.y+=p.dy;
+        p.life--;
+
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,3,0,Math.PI*2);
+        ctx.fillStyle=`hsl(${p.life*3},100%,60%)`;
+        ctx.fill();
+
+        if(p.life<=0){
+            particles.splice(index,1);
+        }
+    });
+}
+
+animate();
+
+// Automatic fireworks
+setInterval(()=>{
+    createFirework(
+        Math.random()*canvas.width,
+        Math.random()*canvas.height*0.5
+    );
+},1200);
+
+window.addEventListener('resize',()=>{
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+});
+</script>
+
+</body>
+</html>
+```
